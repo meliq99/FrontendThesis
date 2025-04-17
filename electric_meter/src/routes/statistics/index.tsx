@@ -8,39 +8,76 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import { TouchBackend } from "react-dnd-touch-backend";
 import { useMediaQuery } from "@/hooks/use-media-query"
 import { Device } from '@/types/device';
+import mqtt from 'mqtt';
 
+// WebSocket endpoint provided by the RabbitMQ Web MQTT plugin.
+const MQTT_ENDPOINT = "ws://localhost:15675/ws";
+const topic = "test/mqtt";
+
+// Set connection options using guest credentials.
+const options = {
+  username: 'guest',
+  password: 'guest'
+};
 
 const StatisticsRootComponent = () => {
   const [connectedDevices, setConnectedDevices] = useState<Device[]>([]);
+  const [client, setClient] = useState(null);
   const [data, setData] = useState<number[]>([]);
   const [totalConsumption, setTotalConsumption] = useState(0);
   const isMobile = useMediaQuery("(max-width: 768px)")
+  
   const generateSingleDataPoint = () => {
     return Math.random() * 10;
   }
 
+  useEffect(() => {
+    // Create the client here so the listeners are attached immediately.
+    const mqttClient = mqtt.connect(MQTT_ENDPOINT, options);
+
+    mqttClient.on('connect', () => {
+      console.log("Connected to MQTT Broker via WebSocket");
+      mqttClient.subscribe(topic, (err) => {
+        if (err) {
+          console.error("Subscription error:", err);
+        } else {
+          console.log(`Subscribed to topic: ${topic}`);
+        }
+      });
+    });
+    
+    mqttClient.on("message", (receivedTopic, message) => {
+      console.log("Message Received on topic", receivedTopic, ":", message.toString());
+      // Process the message as needed...
+    });
+    
+    setClient(mqttClient);
+
+    // Clean up on unmount
+    return () => {
+      if (mqttClient) {
+        mqttClient.end();
+      }
+    };
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
       const baseConsumption = 0.5;
-      const deviceConsumption = connectedDevices.reduce((sum, device) => sum + device.consumption, 0)
+      const deviceConsumption = connectedDevices.reduce((sum, device) => sum + device.consumption_value, 0)
       const totalConsumption = baseConsumption + deviceConsumption;
 
       const newConsumption = totalConsumption + (Math.random() * 0.2 - 0.1);
       setTotalConsumption(newConsumption);
 
-
-
       setData(prevData => {
         const newData = [...prevData, generateSingleDataPoint()];
         return newData.length > 20 ? newData.slice(1) : newData;
-
-
       });
     }, 2000); // 2 seconds interval
 
     return () => clearInterval(interval);
-  }, []); // Empty dependency array is correct here since we're using functional updates
+  }, [connectedDevices]); // Added connectedDevices to dependency array for correct consumption calculation
 
   const handleAddDevice = (device: Device) => {
     setConnectedDevices((prev) => [...prev, device]);
@@ -50,7 +87,7 @@ const StatisticsRootComponent = () => {
     setConnectedDevices((prev) => prev.filter((device) => device.id !== id))
   }
 
-  const backend = isMobile ? TouchBackend : HTML5Backend
+  const backend = isMobile ? TouchBackend : HTML5Backend;
   return (
     <DndProvider backend={backend}>
       <main className="flex min-h-screen flex-col bg-background">
@@ -90,66 +127,6 @@ const StatisticsRootComponent = () => {
   )
 }
 
-// const ProvisionalStatisticsComponent = () => {
-//   return (
-//     <div className='bg-yellow-500 h-1/2'>
-//       <p>Provisional Statistics</p>
-//     </div>
-//   )
-// }
-
-// const DevicePaletteComponent = () => {
-
-//   const devices = [
-//     {
-//       text: 'Light Bulb',
-//       color: 'red',
-//       consumption: 0.06,
-//       icon: <Lightbulb />
-//     },
-//     {
-//       text: 'Television',
-//       color: 'blue',
-//       consumption: 0.15,
-//       icon: <Tv />
-//     },
-//     {
-//       text: 'Refrigerator',
-//       color: 'green',
-//       consumption: 0.2,
-//       icon: <Refrigerator />
-//     }
-//   ];
-
-//   return (
-//     <div className='flex gap-4 p-4 h-screen bg-blue-500'>
-//       <Card>
-//         <CardHeader className="pb-3">
-//           <CardTitle>Devices</CardTitle>
-//         </CardHeader>
-//         <CardContent>
-//           <div className="grid grid-cols-2 gap-3">
-//             {devices.map((device) => (
-//               <DeviceItem
-//                 key={device.text}
-//                 text={device.text}
-//                 color={device.color}
-//                 consumption={device.consumption}
-//                 icon={device.icon}
-//               />
-//             ))}
-//           </div>
-//         </CardContent>
-//       </Card>
-//       <div className='flex-1 h-1/4 bg-red-500'>
-//         <ProvisionalStatisticsComponent />
-//       </div>
-//     </div>
-//   )
-// }
-
 export const Route = createFileRoute('/statistics/')({
   component: StatisticsRootComponent,
 })
-
-

@@ -32,7 +32,7 @@ import {
       if (!tooltip) return null;
   
       const { dataPoints } = tooltip;
-      const point = dataPoints[0];
+      const point = dataPoints?.length > 0 ? dataPoints[0] : 0;
   
       if (!point) return null;
   

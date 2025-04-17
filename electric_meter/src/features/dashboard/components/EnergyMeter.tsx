@@ -181,7 +181,7 @@ const EnergyMeter = ({ connectedDevices, totalConsumption, onRemoveDevice }: Ene
       <div className="mt-4 flex flex-wrap gap-2">
         {connectedDevices.map((device) => (
           <Badge key={device.id} variant="secondary" className="flex items-center gap-1 py-1.5">
-            {device.name} ({device.consumption.toFixed(1)} kW)
+            {device.name} ({device.consumption_value.toFixed(1)} kW)
             <Button
               variant="ghost"
               size="icon"
