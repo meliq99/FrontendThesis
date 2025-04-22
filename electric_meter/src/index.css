@@ -36,6 +36,7 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  --cancel: #ef4444
 }
 
 .dark {
@@ -108,6 +109,7 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-cancel: var(--cancel);
 }
 
 @layer base {
@@ -117,4 +119,127 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Card */
+.electric-meter__card {
+  @apply relative bg-white rounded-2xl p-8 flex flex-col items-center space-y-6;
+  transition: box-shadow 0.2s ease-in-out;
+}
+
+/* Drag & drop effects */
+.electric-meter__card--over {
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.4), 0 0 20px rgba(99, 102, 241, 0.2);
+  background-color: rgba(99, 102, 241, 0.05);
+}
+
+.electric-meter__drop-prompt {
+  @apply absolute inset-0 flex items-center justify-center text-center text-muted-foreground text-sm px-6;
+  opacity: 0.7;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.electric-meter__drop-prompt--visible {
+  opacity: 1;
+  transform: scale(1.05);
+  font-weight: 500;
+  color: rgba(99, 102, 241, 0.8);
+}
+
+/* Gauge */
+.electric-meter__gauge-wrapper {
+  @apply relative w-full max-w-sm;
+}
+.electric-meter__gauge {
+  width: 100%;
+  height: auto;
+}
+.electric-meter__arc-fg {
+  transition: stroke-dasharray 1s ease-out;
+}
+
+/* Needle with smooth transition + sway */
+.electric-meter__needle {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 4px;
+  height: 90px;
+  background: #ef4444;
+  transform-origin: bottom center;
+  transform: translateX(-50%) translateY(-10%) rotate(var(--angle, -90deg));
+  transition: transform 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  border-radius: 2px;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+}
+
+/* When the needle is stable, add subtle animation */
+.electric-meter__needle::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: inherit;
+  border-radius: inherit;
+  opacity: 0;
+  animation: needle-pulse 3s ease-in-out infinite;
+}
+
+/* Center value */
+.electric-meter__value {
+  @apply absolute inset-0 flex flex-col items-center justify-center pointer-events-none;
+}
+
+/* Controls */
+.electric-meter__controls {
+  @apply flex gap-4;
+}
+.electric-meter__btn {
+  @apply px-4 py-2 rounded-full text-sm font-medium ring-1 transition;
+}
+.electric-meter__btn--start {
+  @apply bg-green-50 text-green-700 ring-green-200 hover:bg-green-100;
+}
+.electric-meter__btn--stop {
+  @apply bg-red-50 text-red-700 ring-red-200 hover:bg-red-100;
+}
+.electric-meter__btn--reconnect {
+  @apply bg-blue-50 text-blue-700 ring-blue-200 hover:bg-blue-100;
+}
+
+/* Status badges */
+.electric-meter__status {
+  @apply flex flex-wrap justify-center gap-2;
+}
+.electric-meter__badge {
+  @apply inline-flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-semibold ring-1;
+}
+.electric-meter__badge-dot {
+  @apply h-2 w-2 rounded-full;
+}
+.electric-meter__badge--green {
+  @apply bg-green-50 text-green-700 ring-green-200;
+}
+.electric-meter__badge--yellow {
+  @apply bg-yellow-50 text-yellow-700 ring-yellow-200;
+}
+.electric-meter__badge--red {
+  @apply bg-red-50 text-red-700 ring-red-200;
+}
+
+/* Error badge */
+.electric-meter__error {
+  @apply flex items-center space-x-1 px-2 py-1 bg-red-50 text-red-700 rounded-full text-xs font-medium ring-1 ring-red-200 max-w-[140px] truncate;
+}
+
+/* Pulse animation for needle */
+@keyframes needle-pulse {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 0.3; }
+}
+
+/* Actual small movement animation for when value is stable */
+@keyframes needle-sway {
+  0% { transform: translateX(-50%) translateY(-10%) rotate(calc(var(--angle) - 1deg)); }
+  50% { transform: translateX(-50%) translateY(-10%) rotate(calc(var(--angle) + 1deg)); }
+  100% { transform: translateX(-50%) translateY(-10%) rotate(calc(var(--angle) - 1deg)); }
 }

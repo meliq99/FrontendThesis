@@ -140,6 +140,9 @@ const DevicePalette = ({ onAddDevice }: DevicePaletteProps) => {
           Drag and drop devices onto the meter to connect them
         </div>
       </CardContent>
+      <CardHeader>
+        New Devices
+      </CardHeader>
     </Card>
   );
 }; 

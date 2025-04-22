@@ -1,12 +1,53 @@
-import { createFileRoute } from '@tanstack/react-router'
+import ElectricMeter from "@/features/electric-meter/components/ElectricMeter";
+import { useMediaQuery } from "@/hooks/use-media-query";
+import { useInitApp, initApp } from "@/hooks/useInitApp";
+import DashboardLayout from "@/layouts/DashboardLayout";
+import { createFileRoute } from "@tanstack/react-router";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { TouchBackend } from "react-dnd-touch-backend";
+import { DevicePalette } from "@/features/devide-palette/components/DevicePalette";
+
+const Palette = () => {
+  return <DevicePalette onAddDevice={() => {}} />;
+};
+
+const MeterSection = () => {
+  return (
+    <ElectricMeter
+      onRemoveDevice={() => {
+        console.log("remove device");
+      }}
+    />
+  );
+};
+
+const GraphSection = () => {
+  return <div>Graph Section</div>;
+};
+
+const TopBarRight = () => {
+  return <div>Top Bar Right</div>;
+};
 
 const MainRootComponent = () => {
-  return(
-    <p>Hello "/"!</p>
-  )
-}
+  useInitApp();
+  const isMobile = useMediaQuery("(max-width: 768px)");
+  const backend = isMobile ? TouchBackend : HTML5Backend;
 
-export const Route = createFileRoute('/')({
+  return (
+    <DndProvider backend={backend}>
+      <DashboardLayout
+        palette={<Palette />}
+        meterSection={<MeterSection />}
+        graphSection={<GraphSection />}
+        topBarRight={<TopBarRight />}
+      />
+    </DndProvider>
+  );
+};
+
+export const Route = createFileRoute("/")({
   component: MainRootComponent,
-})
-
+  beforeLoad: () => initApp(),
+});
