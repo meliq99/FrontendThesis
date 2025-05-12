@@ -195,6 +195,7 @@
 }
 .electric-meter__btn {
   @apply px-4 py-2 rounded-full text-sm font-medium ring-1 transition;
+  cursor: pointer;
 }
 .electric-meter__btn--start {
   @apply bg-green-50 text-green-700 ring-green-200 hover:bg-green-100;

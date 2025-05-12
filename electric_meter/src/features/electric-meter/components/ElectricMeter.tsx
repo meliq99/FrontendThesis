@@ -7,13 +7,16 @@ import { useSimulationDevices } from "../hooks/queries";
 import { useMqttConnection } from "@/hooks/useMqttConnection";
 import { useDropTarget } from "../hooks/useDropTarget";
 import type { Device } from "@/types/device";
+import { useStartSimulation, useStopSimulation } from "../hooks/mutations";
 
 export interface ElectricMeterProps {
   onRemoveDevice: (id: string) => void;
 }
 
 const ElectricMeter: React.FC<ElectricMeterProps> = ({ onRemoveDevice }) => {
-  // Callback for when a device is dropped
+  const { config } = useSimulationStore();
+  const {mutate: stopSimulation} = useStopSimulation({simulationId: config?.simulation?.id || ""})
+    // Callback for when a device is dropped
   const handleDeviceDrop = useCallback((item: Device) => {
     console.log("📊 Device added to meter:", item);
   }, []);
@@ -24,7 +27,8 @@ const ElectricMeter: React.FC<ElectricMeterProps> = ({ onRemoveDevice }) => {
   });
 
   // Fetch devices & config
-  const { config } = useSimulationStore();
+  const { mutate: startSimulation } = useStartSimulation({simulationId: config?.simulation?.id || ""})
+
   const { data: devices } = useSimulationDevices({
     electricMeterId: config?.simulation?.electric_meter_id,
   });
@@ -44,8 +48,8 @@ const ElectricMeter: React.FC<ElectricMeterProps> = ({ onRemoveDevice }) => {
   const angle = pct * 180 - 90;
 
   // Start/Stop console stubs
-  const handleStart = () => console.log("▶️ Simulation Start");
-  const handleStop  = () => console.log("⏹️ Simulation Stop");
+  const handleStart = () => startSimulation();
+  const handleStop  = () => stopSimulation();
 
   return (
     <div
@@ -114,13 +118,14 @@ const ElectricMeter: React.FC<ElectricMeterProps> = ({ onRemoveDevice }) => {
       <div className="electric-meter__controls">
         <button
           onClick={handleStart}
-          className="electric-meter__btn electric-meter__btn--start"
+          type="button"
+          className="electric-meter__btn electric-meter__btn--start z-10"
         >
           ▶️ Start
         </button>
         <button
           onClick={handleStop}
-          className="electric-meter__btn electric-meter__btn--stop"
+          className="electric-meter__btn electric-meter__btn--stop z-10"
         >
           ⏹️ Stop
         </button>
