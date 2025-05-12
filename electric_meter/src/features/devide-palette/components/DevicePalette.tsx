@@ -31,9 +31,10 @@ export const DevicePalette: React.FC<DevicePaletteProps> = ({ onAddDevice }) => 
         <div className="mt-4 text-xs text-muted-foreground">
           Drag and drop devices onto the meter to connect them
         </div>
+        <NewDeviceDialog/>
       </CardContent>
 
-      <CardHeader>
+      {/* <CardHeader>
         <CardTitle>News Devices </CardTitle>
       </CardHeader>
       <CardContent>
@@ -42,7 +43,7 @@ export const DevicePalette: React.FC<DevicePaletteProps> = ({ onAddDevice }) => 
         </div>
 
       <NewDeviceDialog/>        
-      </CardContent>
+      </CardContent> */}
     </Card>
   );
 };

@@ -25,7 +25,7 @@ export const DeviceItem: React.FC<DeviceItemProps> = ({ device, onAddDevice }) =
       }}
     >
       <div className="p-2 rounded-full bg-primary/10 text-primary">
-        {getDeviceIcon({ name: device.algorithm_id ? "Refrigerator" : "Lightbulb", size: 24 })}
+        {getDeviceIcon({ name: device.icon, size: 24 })}
       </div>
       <div className="mt-2 text-sm font-medium text-center">{device.name}</div>
       <div className="text-xs text-muted-foreground">{device.consumption_value.toFixed(2)} kW</div>

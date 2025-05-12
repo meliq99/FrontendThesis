@@ -3,9 +3,9 @@ import { DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/di
 const CreateNewDeviceHeader = () => {
     return (
         <DialogHeader>
-            <DialogTitle>Create New Devices</DialogTitle>
+            <DialogTitle>Create New Device</DialogTitle>
             <DialogDescription>
-                Put some description
+            Add a custom device to the palette. Fill in the details below.
             </DialogDescription>
         </DialogHeader>
     )

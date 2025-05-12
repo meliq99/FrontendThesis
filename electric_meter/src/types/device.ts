@@ -3,6 +3,7 @@ export interface Device {
   name: string;
   description: string;
   consumption_value: number;
+  icon: string;
   is_default: boolean;
   peak_consumption: number;
   cycle_duration: number;

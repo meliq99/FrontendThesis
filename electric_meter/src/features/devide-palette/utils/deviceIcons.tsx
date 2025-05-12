@@ -2,14 +2,14 @@ import React from "react";
 import { Lightbulb, Tv, Refrigerator, Fan, Laptop, Smartphone, Coffee, Wifi } from "lucide-react";
 
 type IconName =
-  | "Lightbulb"
-  | "Tv"
-  | "Refrigerator"
-  | "Fan"
-  | "Laptop"
-  | "Smartphone"
-  | "Coffee"
-  | "Wifi";
+  | "lightbulb"
+  | "tv"
+  | "refrigerator"
+  | "fan"
+  | "laptop"
+  | "smartphone"
+  | "coffee"
+  | "wifi";
 
 interface IconProps {
   name: IconName | string;
@@ -27,21 +27,21 @@ export const getDeviceIcon = ({ name, size = 24, className = "" }: IconProps): R
   };
 
   switch (name as IconName) {
-    case "Lightbulb":
+    case "lightbulb":
       return <Lightbulb {...props} />;
-    case "Tv":
+    case "tv":
       return <Tv {...props} />;
-    case "Refrigerator":
+    case "refrigerator":
       return <Refrigerator {...props} />;
-    case "Fan":
+    case "fan":
       return <Fan {...props} />;
-    case "Laptop":
+    case "laptop":
       return <Laptop {...props} />;
-    case "Smartphone":
+    case "smartphone":
       return <Smartphone {...props} />;
-    case "Coffee":
+    case "coffee":
       return <Coffee {...props} />;
-    case "Wifi":
+    case "wifi":
       return <Wifi {...props} />;
     default:
       return <Lightbulb {...props} />;
@@ -52,12 +52,12 @@ export const getDeviceIcon = ({ name, size = 24, className = "" }: IconProps): R
  * Maps device types to their appropriate icons
  */
 export const DEVICE_ICON_MAPPING: Record<string, IconName> = {
-  lightbulb: "Lightbulb",
-  television: "Tv",
-  refrigerator: "Refrigerator",
-  fan: "Fan",
-  laptop: "Laptop",
-  smartphone: "Smartphone",
-  coffee_maker: "Coffee",
-  wifi_router: "Wifi",
+  lightbulb: "lightbulb",
+  television: "tv",
+  refrigerator: "refrigerator",
+  fan: "fan",
+  laptop: "laptop",
+  smartphone: "smartphone",
+  coffee_maker: "coffee",
+  wifi_router: "wifi",
 }; 
