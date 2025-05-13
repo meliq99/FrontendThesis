@@ -11,6 +11,7 @@ export interface Device {
   cycle_duration: number;
   on_duration: number;
   algorithm_id: string;
+  icon: string;
 }
 
 // Simulation interface

@@ -2,7 +2,7 @@ import api from "@/lib/api";
 import type { SimulationConfig } from "@/stores/SimulationStore";
 import { useQuery } from "@tanstack/react-query";
 
-const SimulationConfigKeys = {
+export const SimulationConfigKeys = {
   all: ["simulationConfig"] as const,
 } as const;
 
