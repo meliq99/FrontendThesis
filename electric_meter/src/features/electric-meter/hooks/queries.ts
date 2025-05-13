@@ -14,7 +14,7 @@ export interface SimulationDevice {
   algorithm_id: string;
 }
 
-const SimulationDevicesKeys = {
+export const SimulationDevicesKeys = {
   all: ["simulationDevices"] as const,
 };
 

@@ -28,7 +28,7 @@ export const ConnectedDevicesList = ({
           <Button
             variant="ghost"
             size="icon"
-            className="h-4 w-4 ml-1 rounded-full"
+            className="h-4 w-4 ml-1 rounded-full hover:bg-red-500 hover:text-white cursor-pointer"
             onClick={() => onRemoveDevice(device.id)}
           >
             <X className="h-3 w-3" />

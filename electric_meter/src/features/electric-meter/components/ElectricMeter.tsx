@@ -7,19 +7,25 @@ import { useSimulationDevices } from "../hooks/queries";
 import { useMqttConnection } from "@/hooks/useMqttConnection";
 import { useDropTarget } from "../hooks/useDropTarget";
 import type { Device } from "@/types/device";
-import { useStartSimulation, useStopSimulation } from "../hooks/mutations";
+import { useCreateDeviceSimulation, useDeleteDeviceSimulation, useStartSimulation, useStopSimulation } from "../hooks/mutations";
 
 export interface ElectricMeterProps {
   onRemoveDevice: (id: string) => void;
 }
 
-const ElectricMeter: React.FC<ElectricMeterProps> = ({ onRemoveDevice }) => {
+const ElectricMeter: React.FC<ElectricMeterProps> = () => {
   const { config } = useSimulationStore();
   const {mutate: stopSimulation} = useStopSimulation({simulationId: config?.simulation?.id || ""})
+  const {mutate: createDeviceSimulation} = useCreateDeviceSimulation()
+  const {mutate: deleteDeviceSimulation} = useDeleteDeviceSimulation()
     // Callback for when a device is dropped
   const handleDeviceDrop = useCallback((item: Device) => {
     console.log("📊 Device added to meter:", item);
-  }, []);
+    createDeviceSimulation({
+      ...item,
+      electric_meter_id: config?.simulation?.electric_meter_id || "",
+    })
+  }, [config?.simulation?.electric_meter_id, createDeviceSimulation]);
 
   // React‑DND drop setup using custom hook
   const { isOver, dropRef } = useDropTarget({
@@ -168,7 +174,7 @@ const ElectricMeter: React.FC<ElectricMeterProps> = ({ onRemoveDevice }) => {
       {/* Device list */}
       <ConnectedDevicesList
         devices={devices || []}
-        onRemoveDevice={onRemoveDevice}
+        onRemoveDevice={(id: string) => deleteDeviceSimulation({ simulationId: id })}
       />
     </div>
   );
