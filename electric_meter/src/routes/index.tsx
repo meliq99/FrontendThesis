@@ -2,6 +2,7 @@ import ElectricMeter from "@/features/electric-meter/components/ElectricMeter";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { useInitApp, initApp } from "@/hooks/useInitApp";
 import DashboardLayout from "@/layouts/DashboardLayout";
+import TopBarRight from "@/layouts/TopBarRight";
 import { createFileRoute } from "@tanstack/react-router";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -26,9 +27,7 @@ const GraphSection = () => {
   return <div>Graph Section</div>;
 };
 
-const TopBarRight = () => {
-  return <div>Top Bar Right</div>;
-};
+
 
 const MainRootComponent = () => {
   useInitApp();

@@ -22,7 +22,7 @@ export const ConnectedDevicesList = ({
 				<Badge
 					key={device.id}
 					variant="secondary"
-					className="flex items-center gap-1 py-1.5"
+					className="flex items-center gap-1 py-1.5 border-indigo-500 bg-indigo-50 text-indigo-500"
 				>
 					{device.name} ({device.consumption_value.toFixed(1)} kW)
 					<Button

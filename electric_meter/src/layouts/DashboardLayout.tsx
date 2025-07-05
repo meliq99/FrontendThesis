@@ -16,9 +16,9 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 	return (
 		<div className="min-h-screen h-screen bg-gray-100 flex flex-col">
 			{/* Top Bar */}
-			<header className="bg-white shadow flex items-center justify-between px-6 py-4 flex-shrink-0">
-				<h1 className="text-2xl font-bold">Energy Simulator</h1>
-				<div className="flex items-center space-x-4">{topBarRight}</div>
+			<header className="bg-white shadow flex items-center px-6 py-4 flex-shrink-0">
+				<h1 className="text-2xl font-bold flex-shrink-0">Energy Simulator</h1>
+				<div className="flex-1 ml-6">{topBarRight}</div>
 			</header>
 
 			{/* Main Content */}

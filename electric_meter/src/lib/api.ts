@@ -103,6 +103,34 @@ class ApiService {
 	}
 
 	/**
+	 * Sends a PUT request to the specified URL with the provided data and headers.
+	 *
+	 * @param {string} url - The URL to send the PUT request to.
+	 * @param {PostData} data - The data to include in the PUT request.
+	 * @param {AxiosRequestHeaders} [headers] - The headers to include in the PUT request.
+	 * @returns {Promise<{ data: T, status: number }>} The response data and status code from the API.
+	 */
+	async put<T>(
+		url: string,
+		data: PostData,
+		headers?: AxiosRequestHeaders,
+	): Promise<{ data: T; status: number }> {
+		try {
+			const response: AxiosResponse<T> = await this.axiosInstance.put(
+				url,
+				data,
+				{
+					headers: headers,
+				},
+			);
+			return { data: response.data, status: response.status };
+		} catch (error) {
+			console.error("Error while putting data to the API", error);
+			throw new Error("Error while putting data to the API");
+		}
+	}
+
+	/**
 	 * Sends a DELETE request to the specified URL with the provided parameters and headers.
 	 *
 	 * @param {string} url - The URL to send the DELETE request to.

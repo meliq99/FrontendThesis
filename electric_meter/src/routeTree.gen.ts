@@ -11,10 +11,17 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as DevicesImport } from './routes/devices'
 import { Route as IndexImport } from './routes/index'
 import { Route as StatisticsIndexImport } from './routes/statistics/index'
 
 // Create/Update Routes
+
+const DevicesRoute = DevicesImport.update({
+  id: '/devices',
+  path: '/devices',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const IndexRoute = IndexImport.update({
   id: '/',
@@ -39,6 +46,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/devices': {
+      id: '/devices'
+      path: '/devices'
+      fullPath: '/devices'
+      preLoaderRoute: typeof DevicesImport
+      parentRoute: typeof rootRoute
+    }
     '/statistics/': {
       id: '/statistics/'
       path: '/statistics'
@@ -53,36 +67,41 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/devices': typeof DevicesRoute
   '/statistics': typeof StatisticsIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/devices': typeof DevicesRoute
   '/statistics': typeof StatisticsIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/devices': typeof DevicesRoute
   '/statistics/': typeof StatisticsIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/statistics'
+  fullPaths: '/' | '/devices' | '/statistics'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/statistics'
-  id: '__root__' | '/' | '/statistics/'
+  to: '/' | '/devices' | '/statistics'
+  id: '__root__' | '/' | '/devices' | '/statistics/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DevicesRoute: typeof DevicesRoute
   StatisticsIndexRoute: typeof StatisticsIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DevicesRoute: DevicesRoute,
   StatisticsIndexRoute: StatisticsIndexRoute,
 }
 
@@ -97,11 +116,15 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/devices",
         "/statistics/"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/devices": {
+      "filePath": "devices.tsx"
     },
     "/statistics/": {
       "filePath": "statistics/index.tsx"
