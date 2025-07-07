@@ -12,6 +12,7 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as DevicesImport } from './routes/devices'
+import { Route as AlgorithmsImport } from './routes/algorithms'
 import { Route as IndexImport } from './routes/index'
 import { Route as StatisticsIndexImport } from './routes/statistics/index'
 
@@ -20,6 +21,12 @@ import { Route as StatisticsIndexImport } from './routes/statistics/index'
 const DevicesRoute = DevicesImport.update({
   id: '/devices',
   path: '/devices',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AlgorithmsRoute = AlgorithmsImport.update({
+  id: '/algorithms',
+  path: '/algorithms',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -46,6 +53,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/algorithms': {
+      id: '/algorithms'
+      path: '/algorithms'
+      fullPath: '/algorithms'
+      preLoaderRoute: typeof AlgorithmsImport
+      parentRoute: typeof rootRoute
+    }
     '/devices': {
       id: '/devices'
       path: '/devices'
@@ -67,12 +81,14 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/algorithms': typeof AlgorithmsRoute
   '/devices': typeof DevicesRoute
   '/statistics': typeof StatisticsIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/algorithms': typeof AlgorithmsRoute
   '/devices': typeof DevicesRoute
   '/statistics': typeof StatisticsIndexRoute
 }
@@ -80,27 +96,30 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/algorithms': typeof AlgorithmsRoute
   '/devices': typeof DevicesRoute
   '/statistics/': typeof StatisticsIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/devices' | '/statistics'
+  fullPaths: '/' | '/algorithms' | '/devices' | '/statistics'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/devices' | '/statistics'
-  id: '__root__' | '/' | '/devices' | '/statistics/'
+  to: '/' | '/algorithms' | '/devices' | '/statistics'
+  id: '__root__' | '/' | '/algorithms' | '/devices' | '/statistics/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AlgorithmsRoute: typeof AlgorithmsRoute
   DevicesRoute: typeof DevicesRoute
   StatisticsIndexRoute: typeof StatisticsIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AlgorithmsRoute: AlgorithmsRoute,
   DevicesRoute: DevicesRoute,
   StatisticsIndexRoute: StatisticsIndexRoute,
 }
@@ -116,12 +135,16 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/algorithms",
         "/devices",
         "/statistics/"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/algorithms": {
+      "filePath": "algorithms.tsx"
     },
     "/devices": {
       "filePath": "devices.tsx"

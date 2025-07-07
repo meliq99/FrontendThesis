@@ -1,36 +1,33 @@
 import { useCallback, useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useSimulationConfig } from "@/hooks/queries";
+import { useAlgorithms } from "../hooks/queries";
 import { GeneralTable } from "@/layouts/GeneralTable";
-import { useDevicesColumns } from "./DevicesColumns";
-import { useDevicesColumnsSimplified } from "./DevicesColumnsSimplified";
-import { DeviceDetailView } from "./components/DeviceDetailView";
-import { useDeviceStore } from "./store/DeviceStore";
-import type { Device } from "@/types/device";
+import { useAlgorithmsColumns } from "./AlgorithmsColumns";
+import { useAlgorithmsColumnsSimplified } from "./AlgorithmsColumnsSimplified";
+import { AlgorithmDetailView } from "./AlgorithmDetailView";
+import { useAlgorithmStore } from "../stores/AlgorithmStore";
+import type { Algorithm } from "../hooks/queries";
 
-const Devices: React.FC = () => {
+const Algorithms: React.FC = () => {
 	const {
-		data: simulationConfig,
+		data: algorithms,
 		isLoading,
 		error,
 		refetch,
-	} = useSimulationConfig();
+	} = useAlgorithms();
 	const [isLoadingMore, setIsLoadingMore] = useState(false);
-	const { activeDevice, isDetailViewOpen, openDetailView } = useDeviceStore();
+	const { activeAlgorithm, isDetailViewOpen, openDetailView } = useAlgorithmStore();
 
-	const devices = simulationConfig?.devices ?? [];
+	const algorithmList = algorithms ?? [];
 
 	// Simulate infinite scroll with large datasets
-	const simulatedDevices = useMemo(() => {
-		if (devices.length === 0) return [];
+	const simulatedAlgorithms = useMemo(() => {
+		if (algorithmList.length === 0) return [];
+		return algorithmList;
+	}, [algorithmList]);
 
-		return devices;
-	}, [devices]);
-
-
-
-	const handleRowClick = useCallback((device: Device) => {
-		openDetailView(device);
+	const handleRowClick = useCallback((algorithm: Algorithm) => {
+		openDetailView(algorithm);
 	}, [openDetailView]);
 
 	const handleLoadMore = useCallback(() => {
@@ -42,11 +39,11 @@ const Devices: React.FC = () => {
 		}, 1000);
 	}, []);
 
-	const columns = useDevicesColumns({
-		onEditDevice: () => {}, // No longer needed since we use dialog
+	const columns = useAlgorithmsColumns({
+		onEditAlgorithm: () => {}, // No longer needed since we use dialog
 	});
 
-	const simplifiedColumns = useDevicesColumnsSimplified();
+	const simplifiedColumns = useAlgorithmsColumnsSimplified();
 
 	if (error) {
 		return (
@@ -60,7 +57,7 @@ const Devices: React.FC = () => {
 							viewBox="0 0 24 24"
 							aria-label="Error icon"
 						>
-							<title>Error loading devices</title>
+							<title>Error loading algorithms</title>
 							<path
 								strokeLinecap="round"
 								strokeLinejoin="round"
@@ -70,7 +67,7 @@ const Devices: React.FC = () => {
 						</svg>
 					</div>
 					<p className="text-lg font-medium text-gray-900 mb-2">
-						Error loading devices
+						Error loading algorithms
 					</p>
 					<p className="text-sm text-gray-500 mb-4">{error.message}</p>
 					<button
@@ -96,21 +93,21 @@ const Devices: React.FC = () => {
 				>
 					<div className="mb-4">
 						<h1 className="text-2xl font-bold text-gray-900 mb-2">
-							Device Management
+							Algorithm Management
 						</h1>
 						<p className="text-sm text-gray-600">
 							{isDetailViewOpen
-								? "Click on any device to view details"
-								: "Manage your energy simulation devices."}
+								? "Click on any algorithm to view details"
+								: "Manage your consumption simulation algorithms."}
 						</p>
 					</div>
 
 					<GeneralTable
 						columns={isDetailViewOpen ? simplifiedColumns : columns}
-						data={simulatedDevices}
+						data={simulatedAlgorithms}
 						isLoading={isLoading}
 						onRowClick={handleRowClick}
-						emptyMessage="No devices found."
+						emptyMessage="No algorithms found."
 						className="flex-1"
 						hasMore={false}
 						onLoadMore={handleLoadMore}
@@ -121,7 +118,7 @@ const Devices: React.FC = () => {
 
 				{/* Detail View (Right side) */}
 				<AnimatePresence>
-					{isDetailViewOpen && activeDevice && (
+					{isDetailViewOpen && activeAlgorithm && (
 						<motion.div
 							className="flex-1 min-w-0"
 							initial={{ opacity: 0, x: "100%" }}
@@ -130,8 +127,8 @@ const Devices: React.FC = () => {
 							transition={{ duration: 0.3, ease: "easeInOut" }}
 						>
 							<div className="h-full border border-gray-200 rounded-lg bg-white">
-								<DeviceDetailView
-									device={activeDevice}
+								<AlgorithmDetailView
+									algorithm={activeAlgorithm}
 								/>
 							</div>
 						</motion.div>
@@ -142,4 +139,4 @@ const Devices: React.FC = () => {
 	);
 };
 
-export default Devices;
+export default Algorithms; 

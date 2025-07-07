@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@codemirror/lang-python": "^6.2.1",
     "@hookform/resolvers": "^5.0.1",
     "@radix-ui/react-dialog": "^1.1.10",
     "@radix-ui/react-label": "^2.1.4",
@@ -20,6 +21,9 @@
     "@tanstack/react-query-devtools": "^5.72.1",
     "@tanstack/react-router": "^1.115.2",
     "@tanstack/react-table": "^8.21.3",
+    "@uiw/codemirror-theme-copilot": "^4.24.0",
+    "@uiw/codemirror-theme-material": "^4.24.0",
+    "@uiw/react-codemirror": "^4.24.0",
     "axios": "^1.8.4",
     "chart.js": "^4.4.8",
     "class-variance-authority": "^0.7.1",

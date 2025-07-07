@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Home, BarChart3, Settings, Tv } from "lucide-react";
+import { Home, BarChart3, Settings, Tv, Code } from "lucide-react";
 import { Link, useLocation } from "@tanstack/react-router";
 
 const TopBarRight = () => {
@@ -11,25 +11,31 @@ const TopBarRight = () => {
       path: "/",
       label: "Dashboard",
       icon: Home,
-      activeColor: "bg-indigo-600 hover:bg-indigo-700 border-indigo-500", // Blue for home/dashboard
+      activeColor: "bg-indigo-600 hover:bg-indigo-700 border-indigo-500",
     },
     {
       path: "/statistics",
       label: "Statistics",
       icon: BarChart3,
-      activeColor: "bg-indigo-600 hover:bg-indigo-700 border-indigo-500", // Green for statistics/growth
+      activeColor: "bg-indigo-600 hover:bg-indigo-700 border-indigo-500",
     },
     {
       path: "/devices",
       label: "Devices",
       icon: Tv,
-      activeColor: "bg-indigo-600 hover:bg-indigo-700 border-indigo-500", // Indigo to match the theme
+      activeColor: "bg-indigo-600 hover:bg-indigo-700 border-indigo-500",
+    },
+    {
+      path: "/algorithms",
+      label: "Algorithms",
+      icon: Code,
+      activeColor: "bg-indigo-600 hover:bg-indigo-700 border-indigo-500",
     },
     {
       path: "/settings",
       label: "Settings",
       icon: Settings,
-      activeColor: "bg-indigo-600 hover:bg-indigo-700 border-indigo-500", // Gray for settings/configuration
+      activeColor: "bg-indigo-600 hover:bg-indigo-700 border-indigo-500",
     },
   ];
 

@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { Device } from "@/types/device";
 import { getDeviceIcon } from "@/features/device-palette/utils/deviceIcons";
 import { useDeleteDevice } from "@/features/device-palette/hooks/mutations";
-import { useDeviceStore } from "../store/DeviceStore";
+import { useDeviceStore } from "../stores/DeviceStore";
 import { EditDeviceDialog } from "./EditDeviceDialog";
 import { useSimulationConfig } from "@/hooks/queries";
 

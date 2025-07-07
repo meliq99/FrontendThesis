@@ -1,5 +1,5 @@
 import { NewDeviceDialog } from "@/features/device-palette/components/NewDeviceDialog";
-import { useDeviceStore } from "../store/DeviceStore";
+import { useDeviceStore } from "../stores/DeviceStore";
 import { useState } from "react";
 
 interface EditDeviceDialogProps {
