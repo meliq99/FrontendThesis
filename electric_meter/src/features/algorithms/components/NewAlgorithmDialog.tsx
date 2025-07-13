@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useCreateAlgorithm, useUpdateAlgorithm } from "../hooks/mutations";
 import { materialDark } from "@uiw/codemirror-theme-material";
+import { ScheduleEditor } from "./ScheduleEditor";
 import type { Algorithm } from "../hooks/queries";
 
 const algorithmSchema = z.object({
@@ -46,6 +47,8 @@ export const NewAlgorithmDialog = ({
 	const isControlled = controlledOpen !== undefined && controlledOnOpenChange !== undefined;
 	const open = isControlled ? controlledOpen : internalOpen;
 	const setOpen = isControlled ? controlledOnOpenChange : setInternalOpen;
+	
+	const lastProgrammaticScript = useRef<string | null>(null);
 
 	const {
 		register,
@@ -66,6 +69,48 @@ export const NewAlgorithmDialog = ({
 
 	const algorithmType = watch("algorithm_type");
 	const scriptValue = watch("script");
+
+	// Schedule state for active algorithm, in seconds
+	const [schedule, setSchedule] = useState<[number, number][]>([[3600, 7200]]);
+
+	// Generate script based on algorithm type and schedule
+	const generateScript = useCallback((scheduleData: [number, number][]) => {
+		const scheduleStr = JSON.stringify(scheduleData);
+		return `def simulate(current_time, base_consumption, _, __, ___, extra_params):
+    schedule = extra_params.get('schedule', ${scheduleStr})
+    day_time = current_time % 86400
+    for start, end in schedule:
+        if start <= day_time < end:
+            return base_consumption
+    # modo standby muy bajo
+    return 10`;
+	}, []);
+
+	// Update script when schedule changes
+	const handleScheduleChange = useCallback((newSchedule: [number, number][]) => {
+		setSchedule(newSchedule);
+		if (algorithmType === "active") {
+			const newScript = generateScript(newSchedule);
+			setValue("script", newScript);
+			lastProgrammaticScript.current = newScript;
+		}
+	}, [algorithmType, setValue, generateScript]);
+	
+	const parseScheduleFromScript = (script: string): [number, number][] | null => {
+		try {
+			const match = script.match(/schedule = extra_params\.get\('schedule', (\[.*?\])\)/);
+			if (match && match[1]) {
+				const parsed = JSON.parse(match[1]);
+				// Basic validation
+				if (Array.isArray(parsed) && parsed.every(p => Array.isArray(p) && p.length === 2 && typeof p[0] === 'number' && typeof p[1] === 'number')) {
+					return parsed;
+				}
+			}
+		} catch (e) {
+			return null;
+		}
+		return null;
+	}
 
 	const onSubmit = useCallback((data: AlgorithmFormData) => {
 		if (isEditMode && editAlgorithm) {
@@ -99,27 +144,45 @@ export const NewAlgorithmDialog = ({
 
 	const handleCancel = useCallback(() => {
 		reset();
+		setSchedule([[3600, 7200]]);
 		setOpen(false);
 	}, [reset, setOpen]);
 
 	// Reset form when opening dialog or changing edit algorithm
 	useEffect(() => {
 		if (open) {
+			const initialScript = editAlgorithm?.script || generateScript([[3600, 7200]]);
+			const initialSchedule = parseScheduleFromScript(initialScript) || [[3600, 7200]];
+			
 			reset({
 				name: editAlgorithm?.name || "",
 				description: editAlgorithm?.description || "",
-				algorithm_type: editAlgorithm?.algorithm_type || "",
-				script: editAlgorithm?.script || "",
+				algorithm_type: editAlgorithm?.algorithm_type || "active",
+				script: initialScript,
 			});
+			setSchedule(initialSchedule);
+			lastProgrammaticScript.current = initialScript;
 		}
-	}, [open, editAlgorithm, reset]);
+	}, [open, editAlgorithm, reset, generateScript]);
 
 	const handleAlgorithmTypeChange = useCallback((value: string) => {
 		setValue("algorithm_type", value);
-	}, [setValue]);
+		if (value === 'active') {
+			const newScript = generateScript(schedule);
+			setValue("script", newScript);
+			lastProgrammaticScript.current = newScript;
+		}
+	}, [setValue, schedule, generateScript]);
 
 	const handleScriptChange = useCallback((value: string) => {
 		setValue("script", value);
+		// If this change wasn't from the schedule editor, try to parse it
+		if (value !== lastProgrammaticScript.current) {
+			const parsedSchedule = parseScheduleFromScript(value);
+			if (parsedSchedule) {
+				setSchedule(parsedSchedule);
+			}
+		}
 	}, [setValue]);
 
 	return (
@@ -152,6 +215,7 @@ export const NewAlgorithmDialog = ({
 									<SelectValue placeholder="Select algorithm type" />
 								</SelectTrigger>
 								<SelectContent>
+									<SelectItem value="active">Active</SelectItem>
 									<SelectItem value="cyclic">Cyclic</SelectItem>
 									<SelectItem value="random">Random</SelectItem>
 									<SelectItem value="linear">Linear</SelectItem>
@@ -176,6 +240,17 @@ export const NewAlgorithmDialog = ({
 							<p className="text-sm text-red-600">{errors.description.message}</p>
 						)}
 					</div>
+					
+					{/* Schedule Editor for Active Algorithm */}
+					{algorithmType === "active" && (
+						<div className="space-y-2">
+							<ScheduleEditor
+								schedule={schedule}
+								onScheduleChange={handleScheduleChange}
+							/>
+						</div>
+					)}
+					
 					<div className="space-y-2">
 						<Label htmlFor="script">Script</Label>
 						<div className={`border rounded-md ${errors.script ? "border-red-500" : "border-gray-300"}`}>

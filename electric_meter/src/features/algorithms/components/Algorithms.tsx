@@ -5,7 +5,9 @@ import { GeneralTable } from "@/layouts/GeneralTable";
 import { useAlgorithmsColumns } from "./AlgorithmsColumns";
 import { useAlgorithmsColumnsSimplified } from "./AlgorithmsColumnsSimplified";
 import { AlgorithmDetailView } from "./AlgorithmDetailView";
+import { NewAlgorithmDialog } from "./NewAlgorithmDialog";
 import { useAlgorithmStore } from "../stores/AlgorithmStore";
+import { Button } from "@/components/ui/button";
 import type { Algorithm } from "../hooks/queries";
 
 const Algorithms: React.FC = () => {
@@ -91,15 +93,37 @@ const Algorithms: React.FC = () => {
 						isDetailViewOpen ? "w-2/5" : "w-full"
 					}`}
 				>
-					<div className="mb-4">
-						<h1 className="text-2xl font-bold text-gray-900 mb-2">
-							Algorithm Management
-						</h1>
-						<p className="text-sm text-gray-600">
-							{isDetailViewOpen
-								? "Click on any algorithm to view details"
-								: "Manage your consumption simulation algorithms."}
-						</p>
+					<div className="mb-4 flex items-center justify-between">
+						<div>
+							<h1 className="text-2xl font-bold text-gray-900 mb-2">
+								Algorithm Management
+							</h1>
+							<p className="text-sm text-gray-600">
+								{isDetailViewOpen
+									? "Click on any algorithm to view details"
+									: "Manage your consumption simulation algorithms."}
+							</p>
+						</div>
+						<NewAlgorithmDialog
+							trigger={
+								<Button className="bg-indigo-600 hover:bg-indigo-700">
+									<svg
+										className="w-4 h-4 mr-2"
+										fill="none"
+										stroke="currentColor"
+										viewBox="0 0 24 24"
+									>
+										<path
+											strokeLinecap="round"
+											strokeLinejoin="round"
+											strokeWidth={2}
+											d="M12 4v16m8-8H4"
+										/>
+									</svg>
+									Add New Algorithm
+								</Button>
+							}
+						/>
 					</div>
 
 					<GeneralTable
