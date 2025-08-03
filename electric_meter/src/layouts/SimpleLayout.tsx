@@ -10,7 +10,7 @@ const SimpleLayout: React.FC<SimpleLayoutProps> = ({ children }) => {
 		<div className="min-h-screen h-screen bg-gray-100 flex flex-col">
 			{/* Top Bar */}
 			<header className="bg-white shadow flex items-center px-6 py-4 flex-shrink-0">
-				<h1 className="text-2xl font-bold flex-shrink-0">Energy Simulator</h1>
+				<h1 className="text-2xl font-bold flex-shrink-0">Gridwise</h1>
 				<div className="flex-1 ml-6">
 					<TopBarRight />
 				</div>

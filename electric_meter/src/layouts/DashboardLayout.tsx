@@ -17,7 +17,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 		<div className="min-h-screen h-screen bg-gray-100 flex flex-col">
 			{/* Top Bar */}
 			<header className="bg-white shadow flex items-center px-6 py-4 flex-shrink-0">
-				<h1 className="text-2xl font-bold flex-shrink-0">Energy Simulator</h1>
+				<h1 className="text-2xl font-bold flex-shrink-0">Gridwise</h1>
 				<div className="flex-1 ml-6">{topBarRight}</div>
 			</header>
 
@@ -34,10 +34,10 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 					</section>
 
 					{/* Consumption Graph Section */}
-					<section className="bg-white rounded-lg shadow p-6">
+					{/* <section className="bg-white rounded-lg shadow p-6">
 						<h2 className="text-xl font-semibold mb-4">Consumption Graph</h2>
 						{graphSection}
-					</section>
+					</section> */}
 				</main>
 			</div>
 		</div>
