@@ -61,7 +61,7 @@ const ElectricMeter: React.FC<ElectricMeterProps> = () => {
 	} = useMqttConnection();
 
 	// Gauge math: –90° to +90°
-	const maxC = 1000;
+	const maxC = 100; // Maximum 100 kW for the gauge display
 	const pct = Math.min(1, Math.max(0, totalConsumption / maxC));
 	const angle = pct * 180 - 90;
 

@@ -77,13 +77,18 @@ export const NewAlgorithmDialog = ({
 	const generateScript = useCallback((scheduleData: [number, number][]) => {
 		const scheduleStr = JSON.stringify(scheduleData);
 		return `def simulate(current_time, base_consumption, _, __, ___, extra_params):
+    """
+    Simulates device consumption based on schedule.
+    base_consumption: Device base consumption in kW
+    Returns: Current consumption in kW
+    """
     schedule = extra_params.get('schedule', ${scheduleStr})
     day_time = current_time % 86400
     for start, end in schedule:
         if start <= day_time < end:
-            return base_consumption
-    # modo standby muy bajo
-    return 10`;
+            return base_consumption  # Return full consumption during active periods
+    # Standby mode - minimal consumption (0.1 kW)
+    return 0.1`;
 	}, []);
 
 	// Update script when schedule changes
