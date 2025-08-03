@@ -89,7 +89,7 @@ const EnergyMeter = ({ connectedDevices, totalConsumption, onRemoveDevice }: Ene
     ctx.fill();
 
     // Draw consumption indicator
-    const maxConsumption = 5; // kW
+    const maxConsumption = 100; // kW - standardized maximum
     const percentage = Math.min(consumption / maxConsumption, 1);
     const startAngle = Math.PI * 0.8;
     const endAngle = startAngle + Math.PI * 1.4 * percentage;

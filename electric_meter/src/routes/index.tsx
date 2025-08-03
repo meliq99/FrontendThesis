@@ -1,6 +1,9 @@
 import ElectricMeter from "@/features/electric-meter/components/ElectricMeter";
+import ConsumptionGraph from "@/features/dashboard/components/ConsumptionGraph";
+import { ConsumptionStats } from "@/features/dashboard/components/ConsumptionStats";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { useInitApp, initApp } from "@/hooks/useInitApp";
+import { useMqttConnection } from "@/hooks/useMqttConnection";
 import DashboardLayout from "@/layouts/DashboardLayout";
 import TopBarRight from "@/layouts/TopBarRight";
 import { createFileRoute } from "@tanstack/react-router";
@@ -24,7 +27,25 @@ const MeterSection = () => {
 };
 
 const GraphSection = () => {
-  return <div>Graph Section</div>;
+  const { consumptionHistory, totalDataPoints, resetDataPoints } = useMqttConnection();
+  
+  return (
+    <div className="flex gap-6">
+      {/* Stats on the left */}
+      <div className="w-64 flex-shrink-0">
+        <ConsumptionStats 
+          data={consumptionHistory} 
+          totalDataPoints={totalDataPoints}
+          onResetDataPoints={resetDataPoints}
+        />
+      </div>
+      
+      {/* Graph on the right */}
+      <div className="flex-1">
+        <ConsumptionGraph data={consumptionHistory} />
+      </div>
+    </div>
+  );
 };
 
 

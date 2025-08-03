@@ -61,11 +61,13 @@ const NewDeviceForm = ({
 					name="consumption_value"
 					render={({ field }) => (
 						<FormItem>
-							<FormLabel>Consumption Value</FormLabel>
+							<FormLabel>Base Consumption (kW)</FormLabel>
 							<FormControl>
 								<Input 
 									{...field} 
 									type="number" 
+									step="0.1"
+									placeholder="e.g., 2.5"
 									onChange={e => field.onChange(Number.parseFloat(e.target.value) || 0)}
 								/>
 							</FormControl>
@@ -78,11 +80,13 @@ const NewDeviceForm = ({
 					name="peak_consumption"
 					render={({ field }) => (
 						<FormItem>
-							<FormLabel>Peak Consumption</FormLabel>
+							<FormLabel>Peak Consumption (kW)</FormLabel>
 							<FormControl>
 								<Input 
 									{...field} 
 									type="number" 
+									step="0.1"
+									placeholder="e.g., 5.0"
 									onChange={e => field.onChange(Number.parseFloat(e.target.value) || 0)}
 								/>
 							</FormControl>
@@ -97,11 +101,13 @@ const NewDeviceForm = ({
 					name="cycle_duration"
 					render={({ field }) => (
 						<FormItem>
-							<FormLabel>Cycle Duration</FormLabel>
+							<FormLabel>Cycle Duration (seconds)</FormLabel>
 							<FormControl>
 								<Input 
 									{...field} 
 									type="number" 
+									step="1"
+									placeholder="e.g., 3600"
 									onChange={e => field.onChange(Number.parseFloat(e.target.value) || 0)}
 								/>
 							</FormControl>
@@ -114,11 +120,13 @@ const NewDeviceForm = ({
 					name="on_duration"
 					render={({ field }) => (
 						<FormItem>
-							<FormLabel>On Duration</FormLabel>
+							<FormLabel>On Duration (seconds)</FormLabel>
 							<FormControl>
 								<Input 
 									{...field} 
 									type="number" 
+									step="1"
+									placeholder="e.g., 1800"
 									onChange={e => field.onChange(Number.parseFloat(e.target.value) || 0)}
 								/>
 							</FormControl>
