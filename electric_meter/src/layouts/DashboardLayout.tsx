@@ -34,10 +34,10 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 					</section>
 
 					{/* Consumption Graph Section */}
-					{/* <section className="bg-white rounded-lg shadow p-6">
+					<section className="bg-white rounded-lg shadow p-6">
 						<h2 className="text-xl font-semibold mb-4">Consumption Graph</h2>
 						{graphSection}
-					</section> */}
+					</section>
 				</main>
 			</div>
 		</div>
